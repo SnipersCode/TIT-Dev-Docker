@@ -1,0 +1,38 @@
+dashboard:
+  restart: always
+  build: ./dashboard
+  expose:
+    - "3031"
+  links:
+    - database:database
+  volumes:
+    - /usr/src/app/static
+  env_file: dashboard.env
+  command: uwsgi uwsgi.ini
+
+nginx:
+  restart: always
+  build: ./nginx
+  ports:
+    - "80:80"
+  volumes:
+    - /www/static
+  volumes_from:
+    - dashboard
+  links:
+    - dashboard:dashboard
+
+dbdata:
+  restart: no
+  image: mongo:latest
+  volumes:
+    - /data/db
+  command: --prevent-data-container-run
+
+database:
+  restart: always
+  build ./database
+  volumes_from:
+    - dbdata
+  ports:
+    - "27017:27017"

@@ -1,0 +1,16 @@
+server {
+    listen 80;
+    server_name localhost;
+    charset utf-8;
+
+    location /static {
+        alias /usr/src/app/static;
+    }
+
+    location / { try_files $uri @dashboard; }
+    location @dashboard {
+        uwsgi_pass dashboard:3031;
+        include uwsgi_params;
+    }
+
+}
