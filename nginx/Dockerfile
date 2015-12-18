@@ -1,4 +1,4 @@
 FROM nginx:latest
 
-RUN rm /etc/nginx/sites-enabled/default
-COPY sites-enabled/ /etc/nginx/sites-enabled
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY conf.d/ /etc/nginx/conf.d
