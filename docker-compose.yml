@@ -8,7 +8,7 @@ dashboard:
   volumes:
     - /usr/src/app/static
   env_file: dashboard.env
-  command: uwsgi uwsgi.ini
+  command: uwsgi --ini uwsgi.ini
 
 nginx:
   restart: "always"
