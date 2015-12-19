@@ -2,4 +2,4 @@
 docker-compose stop
 docker-compose build
 docker-compose up -d
-docker exec titdevdocker_database_1 mongo < /scripts/users_add.txt
+docker exec titdevdocker_database_1 sh -c 'mongo < /scripts/users_add.txt'
