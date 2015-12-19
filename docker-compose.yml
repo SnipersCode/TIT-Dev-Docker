@@ -24,7 +24,7 @@ nginx:
 
 dbdata:
   restart: "no"
-  image: mongo:latest
+  build: ./dbdata
   volumes:
     - /data/db
   command: --prevent-data-container-run

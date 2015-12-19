@@ -1,0 +1,3 @@
+FROM mongo:latest
+
+ONBUILD COPY users_add.txt /data/db/scripts/users_add.txt
