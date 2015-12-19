@@ -24,10 +24,10 @@ nginx:
 
 dbdata:
   restart: "no"
-  build: ./dbdata
+  image: mongo:latest
   volumes:
     - /data/db
-  command: --prevent-data-container-run
+  command: echo "Data Container for Primary Database"
 
 database:
   restart: "always"
