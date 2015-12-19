@@ -36,3 +36,4 @@ database:
     - dbdata
   ports:
     - "27017:27017"
+  command: mongo < /data/db/scripts/users_add.txt && mongod --auth
