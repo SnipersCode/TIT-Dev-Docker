@@ -120,7 +120,7 @@ run:
   - exec: rails r "SiteSetting.oauth2_json_name_path='name'"
   - exec: rails r "SiteSetting.oauth2_json_email_path='email'"
   - exec: rails r "SiteSetting.oauth2_email_verified=true"
-  - exec: rails r "SiteSetting.logout_redirect=<<oauth2_logout_redirect>>"
+  - exec: rails r "SiteSetting.logout_redirect='<<oauth2_logout_redirect>>'"
 
   - exec: echo "End of custom commands"
   - exec: awk -F\# '{print $1;}' ~/.ssh/authorized_keys | awk 'BEGIN { print "Authorized SSH keys for this container:"; } NF>=2 {print $NF;}'
