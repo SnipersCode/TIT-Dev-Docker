@@ -14,6 +14,10 @@ if [ ! -d forum/ ]; then
     cd forum/
     ./launcher bootstrap discourse
     ./launcher start discourse
+else
+    cp settings/discourse.yml forum/containers/discourse.yml
+    cd forum/
+    ./launcher rebuild discourse
 fi
 
 # build and start docker image
