@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# install discourse
+if [ ! -d forum/ ]; then
+    mkdir -p forum/
+    git clone https://github.com/discourse/discourse_docker.git forum/
+    cp settings/discourse.yml forum/containers/discourse.yml
+    cd forum/
+    ./launcher bootstrap discourse
+    ./launcher start discourse
+fi
+
 # build and start docker image
 docker-compose stop
 docker-compose build

@@ -7,7 +7,7 @@ dashboard:
     - database:database
   volumes:
     - /usr/src/app/static
-  env_file: dashboard.env
+  env_file: settings/dashboard.env
   command: uwsgi --ini uwsgi.ini
 
 nginx:
@@ -21,6 +21,7 @@ nginx:
     - dashboard
   links:
     - dashboard:dashboard
+    - discourse
 
 dbdata:
   restart: "no"

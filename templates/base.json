@@ -1,0 +1,17 @@
+{
+  "corporation_id": <<corporation_id>>,
+  "alliance_id": <<alliance_id>>,
+  "access_mask": <<access_mask>>,
+  "image_server": "https://imageserver.eveonline.com",
+  "jf_account_key": <<jf_account_key>>,
+  "market_hub_region": <<market_hub_region>>,
+  "market_hub_system": <<market_hub_system>>,
+  "market_hub_station": <<market_hub_station>>,
+  "market_hub_name": "<<market_hub_name>>",
+  "default_ship_to": "<<default_ship_to>>",
+  "home_station": <<home_station>>,
+  "marketeer_slack_url": "<<marketeer_slack_url>>",
+  "market_service_slack_url": "<<market_service_slack_url>>",
+  "slack_enable": <<slack_enable>>,
+  "forum_url": "<<forum_url>>"
+}

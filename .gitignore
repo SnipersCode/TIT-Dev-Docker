@@ -60,4 +60,9 @@ target/
 .idea/
 
 # Private files
-dashboard.env
+settings/
+database/users_add.txt
+forum/
+unified_config.json
+dashboard/base.json
+nginx/conf.d/default.conf
