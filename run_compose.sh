@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Make sure script is run with sudo
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root (or sudo)"
+    exit 1
+fi
+
 # install discourse
 if [ ! -d forum/ ]; then
     mkdir -p forum/
