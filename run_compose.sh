@@ -18,7 +18,7 @@ fi
 
 # build and start docker image
 docker-compose stop
-docker-compose build
+docker-compose build --no-cache
 docker-compose up -d
 
 # wait for database, then execute init changes to database

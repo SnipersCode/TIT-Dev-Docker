@@ -21,6 +21,7 @@ nginx:
     - dashboard
   links:
     - dashboard:dashboard
+  external_links:
     - discourse
 
 dbdata:
