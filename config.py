@@ -47,6 +47,12 @@ def build():
 
     unified_config["redirect_uri"] = "{0}/auth/sso_endpoint".format(unified_config["dashboard_url"])
 
+    # Check for output folders
+    if not os.path.exists("settings"):
+        os.makedirs("settings")
+    if not os.path.exists(os.path.join("nginx", "conf.d")):
+        os.makedirs(os.path.join("nginx", "conf.d"))
+
     # Start replacing
     replace_pattern = re.compile("(<<(.*)>>)")
     file_list = next(os.walk("templates"))[2]
