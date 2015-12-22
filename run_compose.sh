@@ -26,6 +26,9 @@ docker-compose build --no-cache
 docker-compose up -d
 
 # wait for database, then execute init changes to database
-docker inspect --format '{{ .NetworkSettings.IPAddress }}:27017' titdevdocker_database_1 | \
-xargs wget --retry-connrefused --tries=5 -q --wait=1 --spider
-docker exec titdevdocker_database_1 sh -c 'mongo < /scripts/users_add.txt'
+until docker exec titdev_database sh -c 'mongo < /scripts/users_add.txt'
+do
+    sleep 2
+    echo "Could not connect to database. Retrying... (Use Ctrl-C to stop trying)."
+done
+docker logs titdev_murmur 2>&1 | grep Password

@@ -1,14 +1,12 @@
 dashboard:
   restart: "always"
   build: ./dashboard
-  expose:
-    - "3031"
   links:
     - database:database
   volumes:
     - /usr/src/app/static
   env_file: settings/dashboard.env
-  command: uwsgi --ini uwsgi.ini
+  container_name: titdev_dashboard
 
 nginx:
   restart: "always"
@@ -23,6 +21,7 @@ nginx:
     - dashboard:dashboard
   external_links:
     - discourse
+  container_name: titdev_nginx
 
 dbdata:
   restart: "no"
@@ -30,6 +29,7 @@ dbdata:
   volumes:
     - /data/db
   command: echo "Data Container for Primary Database"
+  container_name: titdev_dbdata
 
 database:
   restart: "always"
@@ -38,3 +38,13 @@ database:
     - dbdata
   ports:
     - "27017:27017"
+  container_name: titdev_database
+
+murmur:
+  restart: "always"
+  build: ./murmur
+  volumes:
+  - /data/murmur
+  ports:
+    - "64738:64738"
+  container_name: titdev_murmur

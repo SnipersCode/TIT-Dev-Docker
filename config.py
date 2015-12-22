@@ -64,6 +64,8 @@ def build():
             output_folder = "database"
         elif template_file == "default.conf":
             output_folder = os.path.join("nginx", "conf.d")
+        elif template_file == "murmur.ini":
+            output_folder = "murmur"
         else:
             output_folder = "settings"
 
