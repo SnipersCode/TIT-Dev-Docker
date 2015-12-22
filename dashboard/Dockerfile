@@ -16,4 +16,4 @@ EXPOSE 3031
 VOLUME /usr/src/app/static
 
 ENTRYPOINT ["uwsgi"]
-CMD ["--ini", "uwsgi.ini"]
+CMD ["--ini uwsgi.ini"]
