@@ -49,4 +49,3 @@ murmur:
     - "64738:64738"
     - "64738:64738/udp"
   container_name: titdev_murmur
-  command: "-supw $RANDOM_PASSWORD && /opt/murmur/murmur.x86 -ini /etc/murmur.ini -fg -v"

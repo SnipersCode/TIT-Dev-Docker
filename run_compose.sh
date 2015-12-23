@@ -31,4 +31,4 @@ do
     sleep 2
     echo "Could not connect to database. Retrying... (Use Ctrl-C to stop trying)."
 done
-docker logs titdev_murmur 2>&1 | grep Password
+docker exec titdev_murmur sh -c '/opt/murmur/murmur.x86 -supw $RANDOM_PASSWORD'
