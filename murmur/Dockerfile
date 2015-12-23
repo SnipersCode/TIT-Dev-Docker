@@ -15,5 +15,5 @@ EXPOSE 64738/tcp 64738/udp 6502
 VOLUME ["/data/murmur"]
 
 # Run murmur
-ENTRYPOINT ["/opt/murmur/murmur.x86", "-fg", "-v"]
-CMD ["-ini /etc/murmur.ini"]
+ENTRYPOINT ["/opt/murmur/murmur.x86", "-ini", "/etc/murmur.ini"]
+CMD ["-fg", "-v"]
