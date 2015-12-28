@@ -61,8 +61,10 @@ target/
 
 # Private files
 settings/
-database/users_add.txt
 forum/
 unified_config.json
 dashboard/base.json
+database/users_add.txt
 nginx/conf.d/default.conf
+murmur/murmur.ini
+mumo/mumo.ini
