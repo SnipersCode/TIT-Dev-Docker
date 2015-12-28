@@ -33,3 +33,6 @@ do
     echo "Could not connect to database. Retrying... (Use Ctrl-C to stop trying)."
 done
 docker exec titdev_murmur sh -c '/opt/murmur/murmur.x86 -supw $RANDOM_PASSWORD'
+
+# Restart dashboard due to database connection hiccup
+docker-compose restart dashboard
