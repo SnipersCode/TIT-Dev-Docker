@@ -23,6 +23,7 @@ fi
 # build and start docker image
 docker-compose stop
 docker-compose build --no-cache
+docker network connect titdevdocker discourse
 docker-compose --x-networking up -d
 
 # wait for database, then execute init changes to database
