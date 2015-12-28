@@ -34,7 +34,8 @@ def build():
     with open("unified_config.json", "r") as unified_config_file:
         unified_config = json.load(unified_config_file)
     # Dynamic settings
-    unified_config["mongo_uri"] = "mongodb://dashboard:{0}@database/dashboard".format(unified_config["random_password"])
+    unified_config["mongo_uri"] = "mongodb://dashboard:{0}@titdev_database/dashboard".format(
+            unified_config["random_password"])
 
     unified_config["oauth2_authorize_url"] = "{0}/oauth/authorize".format(unified_config["dashboard_url"])
     unified_config["oauth2_client_id"] = "id_" + str(uuid.uuid1()).replace("-", "")

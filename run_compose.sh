@@ -23,7 +23,7 @@ fi
 # build and start docker image
 docker-compose stop
 docker-compose build --no-cache
-docker-compose up -d
+docker-compose --x-networking up -d
 
 # wait for database, then execute init changes to database
 until docker exec titdev_database sh -c 'mongo < /scripts/users_add.txt'

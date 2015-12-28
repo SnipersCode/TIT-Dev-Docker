@@ -1,8 +1,6 @@
 dashboard:
   restart: "always"
   build: ./dashboard
-  links:
-    - database:database
   volumes:
     - /usr/src/app/static
   env_file: settings/dashboard.env
@@ -17,8 +15,6 @@ nginx:
     - /www/static
   volumes_from:
     - dashboard
-  links:
-    - dashboard:dashboard
   external_links:
     - discourse
   container_name: titdev_nginx
@@ -55,5 +51,3 @@ mumo:
   restart: "always"
   build: ./mumo
   container_name: titdev_mumo
-  links:
-    - murmur:murmur

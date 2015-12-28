@@ -13,5 +13,7 @@ RUN mkdir modules-enabled && cd modules-enabled && \
   ln -s ../modules-available/seen.ini
 COPY mumo.ini mumo.ini
 
+EXPOSE 50983
+
 ENTRYPOINT ["python", "mumo.py"]
 CMD ["-a"]
