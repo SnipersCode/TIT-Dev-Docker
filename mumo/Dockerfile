@@ -11,6 +11,7 @@ RUN cd /etc/ && \
   git clone https://github.com/mumble-voip/mumo.git && cd mumo && \
   mkdir modules-enabled && cd modules-enabled && \
   ln -s ../modules-available/test.ini
+COPY mumo.ini /etc/mumo/mumo.ini
 
 ENTRYPOINT ["python", "/etc/mumo/mumo.py"]
 CMD ["-a"]
