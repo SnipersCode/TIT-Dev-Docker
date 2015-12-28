@@ -50,3 +50,10 @@ murmur:
     - "64738:64738/udp"
   container_name: titdev_murmur
   env_file: settings/dashboard.env
+
+mumo:
+  restart: "always"
+  build: ./mumo
+  container_name: titdev_mumo
+  links:
+    - murmur:murmur

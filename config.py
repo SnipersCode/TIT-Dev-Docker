@@ -66,6 +66,8 @@ def build():
             output_folder = os.path.join("nginx", "conf.d")
         elif template_file == "murmur.ini":
             output_folder = "murmur"
+        elif template_file == "mumo.ini":
+            output_folder = "mumo"
         else:
             output_folder = "settings"
 
