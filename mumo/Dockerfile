@@ -7,9 +7,10 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /usr/share/slice
 COPY Murmur.ice /usr/share/slice/Murmur.ice
 
-RUN git clone https://github.com/mumble-voip/mumo.git && cd mumo
-RUN mkdir modules-enabled && cd modules-enabled && \
-  ln -s ../modules-available/test.ini && cd ..
+RUN cd /etc/ && \
+  git clone https://github.com/mumble-voip/mumo.git && cd mumo && \
+  mkdir modules-enabled && cd modules-enabled && \
+  ln -s ../modules-available/test.ini
 
-ENTRYPOINT ["python", "mumo.py"]
+ENTRYPOINT ["python", "/etc/mumo/mumo.py"]
 CMD ["-a"]
