@@ -10,7 +10,7 @@ COPY Murmur.ice /usr/share/slice/Murmur.ice
 RUN cd /etc/ && git clone https://github.com/mumble-voip/mumo.git
 WORKDIR /etc/mumo
 RUN mkdir modules-enabled && cd modules-enabled && \
-  ln -s ../modules-available/test.ini
+  ln -s ../modules-available/seen.ini
 COPY mumo.ini mumo.ini
 
 ENTRYPOINT ["python", "mumo.py"]
