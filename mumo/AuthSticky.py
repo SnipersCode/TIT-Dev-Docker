@@ -100,14 +100,20 @@ class AuthSticky(MumoModule):
         except AttributeError:
             server_cfg = self.cfg().all
 
-        has_authed = False
+        # Do auth checks
         if user.userid in self.auth_timers and self.auth_timers[user.userid] + server_cfg.auth_watchdog <= time.time():
+            # If cache has expired
             self.auth_timers[user.userid] = int(time.time())
             server.sendMessage(user.session, "Renew auth check for {0}".format(user.userid))
             # Check for auth
             has_authed = False
         elif not any([x == server_cfg.not_authed_group for x in server.getACL(0)[1]]):
+            # If not in 'not authed' group and cache hasn't expired
+            server.sendMessage(user.session, "not in not-authed group, but cache hasn't expired")
             has_authed = True
+        else:
+            server.sendMessage(user.session, "In not-authed group, but cache hasn't expired")
+            has_authed = False
 
         if not has_authed:
             server.addUserToGroup(0, user.session, server_cfg.not_authed_group)
