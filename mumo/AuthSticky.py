@@ -20,6 +20,7 @@ class AuthSticky(MumoModule):
         self.murmur = manager.getMurmurModule()
 
         self.action_auth = manager.getUniqueAction()
+        self.action_unauth = manager.getUniqueAction()
 
         self.auth_timers = {}
 
@@ -65,7 +66,7 @@ class AuthSticky(MumoModule):
         except AttributeError:
             server_config = self.cfg().all
 
-        assert action == self.action_auth
+        assert action == self.action_unauth
 
         if target.session != user.session:
             server.sendMessage(user.session, "You cannot unauth other users.")
@@ -105,7 +106,7 @@ class AuthSticky(MumoModule):
         manager.addContextMenuEntry(
             server,
             user,
-            self.action_auth,
+            self.action_unauth,
             "Unauth with Dashboard",
             self.__on_unauth,
             self.murmur.ContextUser
