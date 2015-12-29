@@ -51,7 +51,8 @@ class AuthSticky(MumoModule):
         if target.session != user.session:
             server.sendMessage(user.session, "You cannot auth other users.")
             return
-        if not any([x == server_config.not_authed_group for x in server.getACL(0)[1]]):
+        if not any([x.name == server_config.not_authed_group and
+                    target.userid in x.members for x in server.getACL(0)[1]]):
             server.sendMessage(user.session, "Already Authed")
             return
 
@@ -71,7 +72,7 @@ class AuthSticky(MumoModule):
         if target.session != user.session:
             server.sendMessage(user.session, "You cannot unauth other users.")
             return
-        if any([x == server_config.not_authed_group for x in server.getACL(0)[1]]):
+        if any([x.name == server_config.not_authed_group and target.userid in x.members for x in server.getACL(0)[1]]):
             server.sendMessage(user.session, "Already Unauthed")
             return
 
@@ -139,7 +140,7 @@ class AuthSticky(MumoModule):
             server.sendMessage(user.session, "Renew auth check for {0}".format(user.userid))
             # Check for auth
             has_authed = False
-        elif not any([x == svr_cfg.not_authed_group for x in server.getACL(0)[1]]):
+        elif not any([x.name == svr_cfg.not_authed_group and user.userid in x.members for x in server.getACL(0)[1]]):
             # If not in 'not authed' group and cache hasn't expired
             server.sendMessage(user.session, "not in not-authed group, but cache hasn't expired")
             has_authed = True
