@@ -9,8 +9,11 @@ COPY Murmur.ice /usr/share/slice/Murmur.ice
 
 RUN cd /etc/ && git clone https://github.com/mumble-voip/mumo.git
 WORKDIR /etc/mumo
+COPY AuthSticky.ini modules-available/AuthSticky.ini
+COPY AuthSticky.py modules/AuthSticky.py
 RUN mkdir modules-enabled && cd modules-enabled && \
-  ln -s ../modules-available/seen.ini
+  ln -s ../modules-available/seen.ini && \
+  ln -s ../modules-available/AuthSticky.ini
 COPY mumo.ini mumo.ini
 
 EXPOSE 50983
