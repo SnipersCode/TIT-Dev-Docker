@@ -4,6 +4,7 @@ import time
 from mumo_module import MumoModule, commaSeperatedIntegers
 
 
+# noinspection PyPep8Naming
 class AuthSticky(MumoModule):
     default_config = {
         "AuthSticky": (('servers', commaSeperatedIntegers, []), ),
@@ -49,7 +50,9 @@ class AuthSticky(MumoModule):
         if target.session != user.session:
             server.sendMessage(user.session, "You cannot auth other users.")
             return
-        # Add if for already authed
+        if not any([x == server_config.not_authed_group for x in server.getACL(0)[1]]):
+            server.sendMessage(user.session, "Already Authed")
+            return
 
         # Check site auth
         server.sendMessage(user.session, "Checking auth for {0}".format(target.userid))
@@ -58,6 +61,7 @@ class AuthSticky(MumoModule):
 
     def userTextMessage(self, server, user, message, current=None): pass
 
+    # noinspection PyUnusedLocal
     def userConnected(self, server, user, context=None):
         try:
             server_cfg = getattr(self.cfg(), 'server_%d' % server.id())
@@ -84,26 +88,31 @@ class AuthSticky(MumoModule):
             user.channel = server_cfg.not_authed_channel
             server.setState(user)
 
+    # noinspection PyUnusedLocal
     def userDisconnected(self, server, user, context=None):
         if user.userid in self.auth_timers:
             del self.auth_timers[user.userid]
 
+    # noinspection PyUnusedLocal
     def userStateChanged(self, server, user, context=None):
         try:
             server_cfg = getattr(self.cfg(), 'server_%d' % server.id())
         except AttributeError:
             server_cfg = self.cfg().all
 
+        has_authed = False
         if user.userid in self.auth_timers and self.auth_timers[user.userid] + server_cfg.auth_watchdog <= time.time():
             self.auth_timers[user.userid] = int(time.time())
             server.sendMessage(user.session, "Renew auth check for {0}".format(user.userid))
-
+            # Check for auth
             has_authed = False
+        elif not any([x == server_cfg.not_authed_group for x in server.getACL(0)[1]]):
+            has_authed = True
 
-            if not has_authed:
-                server.addUserToGroup(0, user.session, server_cfg.not_authed_group)
-                user.channel = server_cfg.not_authed_channel
-                server.setState(user)
+        if not has_authed:
+            server.addUserToGroup(0, user.session, server_cfg.not_authed_group)
+            user.channel = server_cfg.not_authed_channel
+            server.setState(user)
 
     def channelCreated(self, server, state, context=None): pass
 
