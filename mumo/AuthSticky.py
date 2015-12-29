@@ -42,6 +42,12 @@ class AuthSticky(MumoModule):
             server_config = getattr(self.cfg(), 'server_%d' % server.id())
         except AttributeError:
             server_config = self.cfg().all
+        server.sendMessage(user.session, "{0}".format(
+            [x.name == server_config.not_authed_group and user.userid in x.members for x in server.getACL(0)[1]]
+        ))
+        server.sendMessage(user.session, "{0}".format(
+            [server.getACL(0)[1]]
+        ))
 
         assert action == self.action_auth
 
@@ -127,6 +133,12 @@ class AuthSticky(MumoModule):
             svr_cfg = getattr(self.cfg(), 'server_%d' % server.id())
         except AttributeError:
             svr_cfg = self.cfg().all
+        server.sendMessage(user.session, "{0}".format(
+            [x.name == svr_cfg.not_authed_group and user.userid in x.members for x in server.getACL(0)[1]]
+        ))
+        server.sendMessage(user.session, "{0}".format(
+            [server.getACL(0)[1]]
+        ))
 
         # Do auth checks
         if user.userid < 1:
