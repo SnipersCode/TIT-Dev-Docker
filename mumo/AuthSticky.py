@@ -9,7 +9,6 @@ class AuthSticky(MumoModule):
     default_config = {
         "AuthSticky": (('servers', commaSeperatedIntegers, []), ),
         lambda x: re.match('(all)|(server_\d+)', x): (
-            ('not_authed_group', str, 'not_authed'),
             ('not_authed_channel', int, 0),
             ('auth_watchdog', int, 300)
         )
@@ -23,6 +22,7 @@ class AuthSticky(MumoModule):
         self.action_unauth = manager.getUniqueAction()
 
         self.auth_timers = {}
+        self.auth_cache = set()
 
     def connected(self):
         manager = self.manager()
@@ -38,16 +38,6 @@ class AuthSticky(MumoModule):
     def disconnected(self): pass
 
     def __on_auth(self, server, action, user, target):
-        try:
-            server_config = getattr(self.cfg(), 'server_%d' % server.id())
-        except AttributeError:
-            server_config = self.cfg().all
-        server.sendMessage(user.session, "{0}".format(
-            [x.name == server_config.not_authed_group and user.userid in x.members for x in server.getACL(0)[1]]
-        ))
-        server.sendMessage(user.session, "{0}".format(
-            [server.getACL(0)[1]]
-        ))
 
         assert action == self.action_auth
 
@@ -57,35 +47,30 @@ class AuthSticky(MumoModule):
         if target.session != user.session:
             server.sendMessage(user.session, "You cannot auth other users.")
             return
-        if not any([x.name == server_config.not_authed_group and
-                    target.userid in x.members for x in server.getACL(0)[1]]):
+        if target.userid in self.auth_cache:
             server.sendMessage(user.session, "Already Authed")
             return
 
-        # Check site auth
-        server.sendMessage(user.session, "Checking auth for {0}".format(target.userid))
-        server.removeUserFromGroup(0, target.session, server_config.not_authed_group)
-        server.setState(target)
+        site_authed = True  # Check Site Auth
+        self.auth_timers[target.userid] = int(time.time())
+        if site_authed:
+            server.sendMessage(user.session, "Checking auth for {0}".format(target.userid))
+            self.auth_cache.add(target.userid)
 
     def __on_unauth(self, server, action, user, target):
-        try:
-            server_config = getattr(self.cfg(), 'server_%d' % server.id())
-        except AttributeError:
-            server_config = self.cfg().all
 
         assert action == self.action_unauth
 
         if target.session != user.session:
             server.sendMessage(user.session, "You cannot unauth other users.")
             return
-        if any([x.name == server_config.not_authed_group and target.userid in x.members for x in server.getACL(0)[1]]):
+        if target.userid not in self.auth_cache:
             server.sendMessage(user.session, "Already Unauthed")
             return
 
-        # Check site auth
         server.sendMessage(user.session, "Removed auth for {0}".format(target.userid))
-        server.addUserToGroup(0, user.session, server_config.not_authed_group)
-        server.setState(target)
+        self.auth_timers[target.userid] = int(time.time())
+        self.auth_cache.remove(target.userid)
 
     def userTextMessage(self, server, user, message, current=None): pass
 
@@ -118,9 +103,12 @@ class AuthSticky(MumoModule):
             self.__on_unauth,
             self.murmur.ContextUser
         )
-        server.addUserToGroup(0, user.session, server_cfg.not_authed_group)
-        user.channel = server_cfg.not_authed_channel
-        server.setState(user)
+
+        site_auth = False  # Check Site auth
+        if not site_auth:
+            self.auth_cache.remove(user.userid)
+            user.channel = server_cfg.not_authed_channel
+            server.setState(user)
 
     # noinspection PyUnusedLocal
     def userDisconnected(self, server, user, context=None):
@@ -133,35 +121,29 @@ class AuthSticky(MumoModule):
             svr_cfg = getattr(self.cfg(), 'server_%d' % server.id())
         except AttributeError:
             svr_cfg = self.cfg().all
-        server.sendMessage(user.session, "{0}".format(
-            [x.name == svr_cfg.not_authed_group and user.userid in x.members for x in server.getACL(0)[1]]
-        ))
-        server.sendMessage(user.session, "{0}".format(
-            [server.getACL(0)[1]]
-        ))
 
         # Do auth checks
         if user.userid < 1:
             # Lock out if user is not authenticated
-            has_authed = False
+            site_auth = False
         elif user.userid not in self.auth_timers or (user.userid in self.auth_timers and
                                                      self.auth_timers[user.userid] +
                                                      svr_cfg.auth_watchdog <= time.time()):
             # If cache has expired
             self.auth_timers[user.userid] = int(time.time())
             server.sendMessage(user.session, "Renew auth check for {0}".format(user.userid))
-            # Check for auth
-            has_authed = False
-        elif not any([x.name == svr_cfg.not_authed_group and user.userid in x.members for x in server.getACL(0)[1]]):
-            # If not in 'not authed' group and cache hasn't expired
-            server.sendMessage(user.session, "not in not-authed group, but cache hasn't expired")
-            has_authed = True
+            site_auth = False  # Check for site auth
+            self.auth_cache.remove(user.userid)
+        elif user.userid in self.auth_cache:
+            # If previously site authed and cache hasn't expired
+            server.sendMessage(user.session, "Has previously site authed, but cache hasn't expired")
+            site_auth = True
         else:
-            server.sendMessage(user.session, "In not-authed group, but cache hasn't expired")
-            has_authed = False
+            # If wasn't previously site authed and cache hasn't expired
+            server.sendMessage(user.session, "Has not previously been authed and cache hasn't expired")
+            site_auth = False
 
-        if not has_authed and user.channel != svr_cfg.not_authed_channel:
-            server.addUserToGroup(0, user.session, svr_cfg.not_authed_group)
+        if not site_auth and user.channel != svr_cfg.not_authed_channel:
             user.channel = svr_cfg.not_authed_channel
             server.setState(user)
 
