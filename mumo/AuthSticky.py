@@ -48,14 +48,14 @@ class AuthSticky(MumoModule):
             server.sendMessage(user.session, "You cannot auth other users.")
             return
         if target.userid in self.auth_cache:
-            server.sendMessage(user.session, "Already Authed")
+            server.sendMessage(user.session, "Already Authed.")
             return
 
-        site_authed = True  # Check Site Auth
+        site_authed, target.name = self.titdev_check(target.userid)  # Check Site Auth
         self.auth_timers[target.userid] = int(time.time())
         if site_authed:
-            server.sendMessage(user.session, "Checking auth for {0}".format(target.userid))
             self.auth_cache.add(target.userid)
+        server.setState(target)
 
     def __on_unauth(self, server, action, user, target):
 
@@ -65,12 +65,13 @@ class AuthSticky(MumoModule):
             server.sendMessage(user.session, "You cannot unauth other users.")
             return
         if target.userid not in self.auth_cache:
-            server.sendMessage(user.session, "Already Unauthed")
+            server.sendMessage(user.session, "Already Unauthed.")
             return
 
-        server.sendMessage(user.session, "Removed auth for {0}".format(target.userid))
+        server.sendMessage(user.session, "Removed auth.")
         self.auth_timers[target.userid] = int(time.time())
-        self.auth_cache.remove(target.userid)
+        if target.userid in self.auth_cache:
+            self.auth_cache.remove(target.userid)
 
     def userTextMessage(self, server, user, message, current=None): pass
 
@@ -85,8 +86,6 @@ class AuthSticky(MumoModule):
 
         if user.userid >= 1:
             self.auth_timers[user.userid] = int(time.time())
-        server.sendMessage(user.session, "{0} has connected at: {1}".format(
-                user.userid, self.auth_timers.get(user.userid, -1)))
         manager.addContextMenuEntry(
             server,
             user,
@@ -104,11 +103,12 @@ class AuthSticky(MumoModule):
             self.murmur.ContextUser
         )
 
-        site_auth = False  # Check Site auth
+        site_auth, user.name = self.titdev_check(None)  # Check Site auth
         if not site_auth:
-            self.auth_cache.remove(user.userid)
+            if user.userid in self.auth_cache:
+                self.auth_cache.remove(user.userid)
             user.channel = server_cfg.not_authed_channel
-            server.setState(user)
+        server.setState(user)
 
     # noinspection PyUnusedLocal
     def userDisconnected(self, server, user, context=None):
@@ -131,16 +131,14 @@ class AuthSticky(MumoModule):
                                                      svr_cfg.auth_watchdog <= time.time()):
             # If cache has expired
             self.auth_timers[user.userid] = int(time.time())
-            server.sendMessage(user.session, "Renew auth check for {0}".format(user.userid))
-            site_auth = False  # Check for site auth
-            self.auth_cache.remove(user.userid)
+            site_auth, user.name = self.titdev_check(None)  # Check for site auth
+            if user.userid in self.auth_cache:
+                self.auth_cache.remove(user.userid)
         elif user.userid in self.auth_cache:
             # If previously site authed and cache hasn't expired
-            server.sendMessage(user.session, "Has previously site authed, but cache hasn't expired")
             site_auth = True
         else:
             # If wasn't previously site authed and cache hasn't expired
-            server.sendMessage(user.session, "Has not previously been authed and cache hasn't expired")
             site_auth = False
 
         if not site_auth and user.channel != svr_cfg.not_authed_channel:
@@ -152,3 +150,10 @@ class AuthSticky(MumoModule):
     def channelRemoved(self, server, state, context=None): pass
 
     def channelStateChanged(self, server, state, context=None): pass
+
+    @staticmethod
+    def titdev_check(user_id):
+        if user_id:
+            return True, "[.TIT] Kazuki"
+
+        return False, str(user_id)

@@ -24,7 +24,8 @@ dbdata:
   image: mongo:latest
   volumes:
     - /data/db
-  command: echo "Data Container for Primary Database"
+    - /data/murmur
+  command: echo "Data Container for Primary and Murmur Database"
   container_name: titdev_dbdata
 
 database:
@@ -39,8 +40,8 @@ database:
 murmur:
   restart: "always"
   build: ./murmur
-  volumes:
-  - /data/murmur
+  volumes_from:
+  - dbdata
   ports:
     - "64738:64738"
     - "64738:64738/udp"

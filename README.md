@@ -20,9 +20,9 @@ Initialize your config file
 python config.py init
 ```
 
-Edit your config file with the necessary parameters.
+Edit your config file with the necessary parameters. Use your favorite text editor to do so. I'm an oldie so I use vi.
 
-All fields are required, but you won't be able to fill in the discourse_* settings yet.
+All fields are required, but you won't be able to fill in the discourse_* settings just yet.
 
 ```
 vi unified_config.json
@@ -34,11 +34,26 @@ Build your compose image with your new config file
 python config.py build
 ```
 
-Run the installer
+Run the installer. This takes a LONG time. Go get a coffee or something.
 
 ```
 sudo ./run_compose.sh
 ```
+
+#### Initializing Murmur (Mumble Server)
+You can either initialize murmur with your own sqlite database, or with the super minimal database given. 
+
+If you are using your own sqlite database, copy it to the backups directory and replace the initial_murmur.sqlite file in the following command with your own.
+
+```
+sudo ./backups.sh init murmur initial_murmur.sqlite
+```
+
+**Note:** If you use your own murmur database, you'll also have to change the "not_authed_channel" setting in AuthSticky.ini.
+
+Set it to the id of the channel you want to stick not authenticated users to. AuthSticky.ini is in the mumo folder.
+
+Changes to the AuthSticky.ini will not appear to do anything until you rerun the installer.
 
 #### Integrating with discourse forum
 Login to the site, go to the account page, and set your email to the main email listed in the unified config.
@@ -99,7 +114,7 @@ Super admins can only be added by directly connecting to the database.
 They cannot be added or removed from the web interface in order to limit who can be super admins
 
 ```
-sudo docker exec -it titdevdocker_database_1 bash
+sudo docker exec -it titdev_database bash
 mongo
 use dashboard
 db.eve_auth.update({"_id": "super_admin"}, {$push: {"users": "example_site_id"}})
@@ -124,6 +139,32 @@ Then to restore:
 
 ```
 mongorestore -h dashboard_hostname -d dashboard -u dashboard -p unified_config["random_password"] --drop output_directory
+```
+
+If you just want to backup the entire data container, which will also backup your murmur database, run:
+
+```
+sudo ./backups.sh backup all current_date
+```
+
+You can also make individual backups of specific containers:
+
+```
+sudo ./backups.sh backup murmur current_date
+```
+
+When you want to restore (your list of backups are in the backups directory):
+
+**Warning:** This will remove all files in the data directory (all applicable data) and replace it with the data in the backup.
+
+```
+sudo ./backups.sh restore all previous_date
+```
+
+As long as you are familiar with bash commands, you should also be able to restore individual folders. Ex:
+
+```
+sudo ./backups.sh restore murmur previous_date
 ```
 
 ## Useful commands
