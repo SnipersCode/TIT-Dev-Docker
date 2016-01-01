@@ -126,7 +126,7 @@ class AuthSticky(MumoModule):
             svr_cfg = self.cfg().all
 
         # Do auth checks
-        if user.userid < 1:
+        if user.userid < 0:
             # Lock out if user is not authenticated
             site_auth = False
         elif user.userid not in self.auth_timers or (user.userid in self.auth_timers and
@@ -161,8 +161,4 @@ class AuthSticky(MumoModule):
         if json_response["name"]:
             return json_response["corp"], json_response["name"]
 
-        if not user_name.startswith("[Guest]"):
-            guest_name = "[Guest] " + user_name
-        else:
-            guest_name = user_name
-        return False, guest_name
+        return False, user_name
