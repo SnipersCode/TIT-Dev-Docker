@@ -105,6 +105,7 @@ class AuthSticky(MumoModule):
             self.murmur.ContextUser
         )
 
+        server.sendMessage(user.session, "Your ID is: {0}".format(user.userid))
         site_auth, user.name = self.titdev_check(user.userid, user.name)  # Check Site auth
         if not site_auth:
             if user.userid in self.auth_cache:
@@ -160,4 +161,8 @@ class AuthSticky(MumoModule):
         if json_response["name"]:
             return json_response["corp"], json_response["name"]
 
-        return False, "[Guest] " + user_name
+        if not user_name.startswith("[Guest]"):
+            guest_name = "[Guest] " + user_name
+        else:
+            guest_name = user_name
+        return False, guest_name
