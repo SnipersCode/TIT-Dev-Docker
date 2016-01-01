@@ -1,6 +1,8 @@
 import re
 import time
 
+import requests
+
 from mumo_module import MumoModule, commaSeperatedIntegers
 
 
@@ -51,7 +53,7 @@ class AuthSticky(MumoModule):
             server.sendMessage(user.session, "Already Authed.")
             return
 
-        site_authed, target.name = self.titdev_check(target.userid)  # Check Site Auth
+        site_authed, target.name = self.titdev_check(target.userid, target.name)  # Check Site Auth
         self.auth_timers[target.userid] = int(time.time())
         if site_authed:
             self.auth_cache.add(target.userid)
@@ -103,7 +105,7 @@ class AuthSticky(MumoModule):
             self.murmur.ContextUser
         )
 
-        site_auth, user.name = self.titdev_check(None)  # Check Site auth
+        site_auth, user.name = self.titdev_check(user.userid, user.name)  # Check Site auth
         if not site_auth:
             if user.userid in self.auth_cache:
                 self.auth_cache.remove(user.userid)
@@ -131,8 +133,8 @@ class AuthSticky(MumoModule):
                                                      svr_cfg.auth_watchdog <= time.time()):
             # If cache has expired
             self.auth_timers[user.userid] = int(time.time())
-            site_auth, user.name = self.titdev_check(None)  # Check for site auth
-            if user.userid in self.auth_cache:
+            site_auth, user.name = self.titdev_check(user.userid, user.name)  # Check for site auth
+            if not site_auth and user.userid in self.auth_cache:
                 self.auth_cache.remove(user.userid)
         elif user.userid in self.auth_cache:
             # If previously site authed and cache hasn't expired
@@ -152,8 +154,10 @@ class AuthSticky(MumoModule):
     def channelStateChanged(self, server, state, context=None): pass
 
     @staticmethod
-    def titdev_check(user_id):
-        if user_id:
-            return True, "[.TIT] Kazuki"
+    def titdev_check(user_id, user_name):
+        api_response = requests.get("http://titdev_nginx/api/mumble/" + str(user_id))
+        json_response = api_response.json()
+        if json_response["name"]:
+            return json_response["corp"], json_response["name"]
 
-        return False, str(user_id)
+        return False, "[Guest] " + user_name

@@ -34,5 +34,5 @@ do
 done
 docker exec titdev_murmur sh -c '/opt/murmur/murmur.x86 -supw $RANDOM_PASSWORD'
 
-# Restart dashboard due to database connection hiccup
-docker-compose restart dashboard
+# Restart dashboard and mumo because database and murmur must be running first.
+docker-compose restart dashboard mumo

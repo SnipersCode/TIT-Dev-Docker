@@ -15,6 +15,8 @@ RUN mkdir modules-enabled && cd modules-enabled && \
   ln -s ../modules-available/seen.ini && \
   ln -s ../modules-available/AuthSticky.ini
 COPY mumo.ini mumo.ini
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 50983
 
