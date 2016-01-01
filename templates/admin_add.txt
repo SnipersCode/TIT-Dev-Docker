@@ -1,0 +1,12 @@
+use admin;
+db.createUser({
+  user: "admin",
+  pwd: "<<random_password>>",
+  roles: [{
+    role: "root",
+    db: "admin"
+  },{
+    role: "restore",
+    db: "admin"
+  }]
+});

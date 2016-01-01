@@ -61,7 +61,7 @@ def build():
         # Determine output locations
         if template_file == "base.json":
             output_folder = "dashboard"
-        elif template_file == "users_add.txt":
+        elif template_file in ["admin_add.txt", "users_add.txt"]:
             output_folder = "database"
         elif template_file == "default.conf":
             output_folder = os.path.join("nginx", "conf.d")

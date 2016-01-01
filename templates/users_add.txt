@@ -1,19 +1,7 @@
 use admin;
-db.dropUser("admin")
-db.createUser({
-  user: "admin",
-  pwd: "<<random_password>>",
-  roles: [{
-    role: "root",
-    db: "admin"
-  },{
-    role: "restore",
-    db: "admin"
-  }]
-});
-
+db.auth("admin", "<<random_password>>");
 use dashboard;
-db.dropUser("dashboard")
+db.dropUser("dashboard");
 db.createUser({
   user: "dashboard",
   pwd: "<<random_password>>",
@@ -22,7 +10,7 @@ db.createUser({
     "db": "dashboard"
   }]
 });
-db.oauth2_clients.remove({"name": "forums"}, false)
+db.oauth2_clients.remove({"name": "forums"}, false);
 db.oauth2_clients.insert({
   "_id": "<<oauth2_client_id>>",
   "name": "forums",

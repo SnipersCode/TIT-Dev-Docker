@@ -8,6 +8,12 @@ Docker: https://docs.docker.com/engine/installation/
 
 Docker-Compose: https://docs.docker.com/compose/install/
 
+### Clone this repo (Duh)
+
+```
+git clone https://github.com/SnipersCode/TITDev-Docker.git
+```
+
 ### Building the docker image
 The following instructions assumes your current working directory is the root of this repo.
 
