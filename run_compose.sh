@@ -25,10 +25,12 @@ fi
 # build and start docker image
 docker-compose stop
 docker-compose build --no-cache
-docker-compose --x-networking up -d
 
 # wait for database, then execute init changes to database
 if [ "$FIRST" -eq 1 ]; then
+    docker network create titdev_network
+    docker network connect titdev_network discourse
+    docker-compose up -d
     until docker exec titdev_database sh -c 'mongo < /scripts/admin_add.txt'
     do
         sleep 2
@@ -36,6 +38,7 @@ if [ "$FIRST" -eq 1 ]; then
     done
     docker exec titdev_database sh -c 'mongo < /scripts/users_add.txt'
 else
+    docker-compose up -d
     until docker exec titdev_database sh -c 'mongo < /scripts/users_add.txt'
     do
         sleep 2
@@ -43,11 +46,3 @@ else
     done
 fi
 docker exec titdev_murmur sh -c '/opt/murmur/murmur.x86 -supw $RANDOM_PASSWORD'
-
-# Connect discourse forum and restart all containers to correctly connect networking
-docker network connect titdevdocker discourse
-docker-compose stop
-docker-compose --x-networking up -d
-# Restart dashboard and mumo because database and murmur must be running first.
-sleep 2
-docker-compose restart dashboard mumo

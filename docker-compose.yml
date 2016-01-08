@@ -5,6 +5,7 @@ dashboard:
     - /usr/src/app/static
   env_file: settings/dashboard.env
   container_name: titdev_dashboard
+  net: "titdev_network"
 
 nginx:
   restart: "always"
@@ -18,6 +19,7 @@ nginx:
   external_links:
     - discourse
   container_name: titdev_nginx
+  net: "titdev_network"
 
 dbdata:
   restart: "no"
@@ -27,6 +29,7 @@ dbdata:
     - /data/murmur
   command: echo "Data Container for Primary and Murmur Database"
   container_name: titdev_dbdata
+  net: "none"
 
 database:
   restart: "always"
@@ -37,6 +40,7 @@ database:
     - "27017:27017"
   command: --auth
   container_name: titdev_database
+  net: "titdev_network"
 
 murmur:
   restart: "always"
@@ -48,8 +52,10 @@ murmur:
     - "64738:64738/udp"
   container_name: titdev_murmur
   env_file: settings/dashboard.env
+  net: "titdev_network"
 
 mumo:
   restart: "always"
   build: ./mumo
   container_name: titdev_mumo
+  net: "titdev_network"

@@ -11,7 +11,7 @@ Docker-Compose: https://docs.docker.com/compose/install/
 ### Clone this repo (Duh)
 
 ```
-git clone https://github.com/SnipersCode/TITDev-Docker.git
+git clone https://github.com/tritanium-industries/TITDev-Docker.git
 ```
 
 ### Building the docker image
@@ -83,6 +83,27 @@ Create an API key
 In browser, go to: unified_config["forum_url"]/admin/api
 Generate Master API Key
 ```
+
+#### Locking down your forum
+Because there is no possible way to upload custom css on discourse build, you'll have to do it through the admin console.
+
+This custom css prevents users from editing their email from the forums. 
+If users change their email through the forums, they will lose the account association with the dashboard.
+
+**Warning:** Do NOT uncheck the "email editable" option in discourse.
+This will prevent the dashboard from changing their email if they change it from the dashboard.
+
+In the admin panel > Customise > CSS/HTML (unified_config["forum_url"]/admin/customise/css_html):
+
+New, Name it: Remove email edit, copy the following CSS,
+
+```
+div.user-preferences div.pref-email div.controls a {
+  display: none;
+}
+```
+
+check enabled, and save.
 
 #### Final image
 Copy the API Key into your unified_config.json for the discourse_api_key.

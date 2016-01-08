@@ -21,9 +21,9 @@ templates:
   - "templates/web.ratelimited.template.yml"
 
 ## which TCP/IP ports should this container expose?
-expose:
-  - "8080:80"   # fwd host port 80   to container port 80 (http)
-  - "2222:22" # fwd host port 2222 to container port 22 (ssh)
+# expose:
+#   - "8080:80"   # fwd host port 80   to container port 80 (http)
+#   - "2222:22" # fwd host port 2222 to container port 22 (ssh)
 
 # any extra arguments for Docker?
 # docker_args:
@@ -87,7 +87,7 @@ hooks:
         cd: $home/plugins
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
-          - git clone https://github.com/SnipersCode/discourse-oauth2-basic.git
+          - git clone https://github.com/tritanium-industries/discourse-oauth2-basic.git
 
 ## Remember, this is YAML syntax - you can only have one block with a name
 run:
