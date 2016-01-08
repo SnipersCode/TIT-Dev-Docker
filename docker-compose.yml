@@ -16,8 +16,6 @@ nginx:
     - /www/static
   volumes_from:
     - dashboard
-  external_links:
-    - discourse
   container_name: titdev_nginx
   net: "titdev_network"
 
