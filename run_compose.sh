@@ -42,6 +42,7 @@ if [ "$FIRST" -eq 1 ]; then
     sleep 5
     docker-compose up -d nginx
 else
+    docker network connect titdev_network discourse
     docker-compose up -d dbdata database murmur
     until docker exec titdev_database sh -c 'mongo < /scripts/users_add.txt'
     do
