@@ -82,11 +82,32 @@ def build():
                 else:
                     output_file.write(line)
 
+
+def maintenance(setting):
+    if setting:
+        os.environ["maintenance"] = "True"
+    else:
+        del os.environ["maintenance"]
+
+
 if __name__ == "__main__":
+    valid = True
     if len(sys.argv) > 1:
         if sys.argv[1].strip() == "init":
             init()
         elif sys.argv[1].strip() == "build":
             build()
+        elif sys.argv[1].strip() == "maintenance":
+            if sys.argv[2].strip() == "on":
+                maintenance(True)
+            elif sys.argv[2].strip() == "off":
+                maintenance(False)
+            else:
+                valid = False
+        else:
+            valid = False
     else:
-        build()
+        valid = False
+
+    if not valid:
+        print("Did not supply a valid command.")
