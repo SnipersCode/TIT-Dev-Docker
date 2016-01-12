@@ -142,7 +142,7 @@ class PyMongo(object):
             if pymongo.version_tuple[0] < 3:
                 app.config[key('AUTO_START_REQUEST')] = parsed['options'].get('auto_start_request', True)
             else:
-                app.config[key('CONNECT')] = parsed['options'].get('connect', True)
+                app.config.setdefault(key('CONNECT'), parsed['options'].get('connect', True))
 
             # we will use the URI for connecting instead of HOST/PORT
             app.config.pop(key('HOST'), None)
