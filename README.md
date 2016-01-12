@@ -141,7 +141,7 @@ Super admins can only be added by directly connecting to the database.
 They cannot be added or removed from the web interface in order to limit who can be super admins
 
 ```
-sudo docker exec -it titdev_database bash
+sudo docker exec -it titdev-database bash
 mongo
 use dashboard
 db.eve_auth.update({"_id": "super_admin"}, {$push: {"users": "example_site_id"}})

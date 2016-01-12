@@ -34,7 +34,7 @@ def build():
     with open("unified_config.json", "r") as unified_config_file:
         unified_config = json.load(unified_config_file)
     # Dynamic settings
-    unified_config["mongo_uri"] = "mongodb://dashboard:{0}@titdev_database/dashboard".format(
+    unified_config["mongo_uri"] = "mongodb://dashboard:{0}@titdev-database/dashboard".format(
             unified_config["random_password"])
 
     unified_config["oauth2_authorize_url"] = "{0}/oauth/authorize".format(unified_config["dashboard_url"])
@@ -43,7 +43,6 @@ def build():
             string.ascii_uppercase + string.digits) for _ in range(24))
     unified_config["oauth2_logout_redirect"] = "{0}/auth/log_out".format(unified_config["dashboard_url"])
     unified_config["oauth2_token_url"] = "{0}/oauth/token".format(unified_config["dashboard_url"])
-    unified_config["oauth2_user_json_url"] = "{0}/api/user/me".format(unified_config["dashboard_url"])
     unified_config["oauth2_redirect_uri"] = "{0}/auth/oauth2_basic/callback".format(unified_config["forum_url"])
 
     unified_config["redirect_uri"] = "{0}/auth/sso_endpoint".format(unified_config["dashboard_url"])
