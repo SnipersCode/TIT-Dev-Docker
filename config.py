@@ -42,7 +42,6 @@ def build():
     unified_config["oauth2_client_secret"] = ''.join(random.SystemRandom().choice(
             string.ascii_uppercase + string.digits) for _ in range(24))
     unified_config["oauth2_logout_redirect"] = "{0}/auth/log_out".format(unified_config["dashboard_url"])
-    unified_config["oauth2_token_url"] = "{0}/oauth/token".format(unified_config["dashboard_url"])
     unified_config["oauth2_redirect_uri"] = "{0}/auth/oauth2_basic/callback".format(unified_config["forum_url"])
 
     unified_config["redirect_uri"] = "{0}/auth/sso_endpoint".format(unified_config["dashboard_url"])

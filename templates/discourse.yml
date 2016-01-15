@@ -113,7 +113,7 @@ run:
   - exec: rails r "SiteSetting.oauth2_client_id='<<oauth2_client_id>>'"
   - exec: rails r "SiteSetting.oauth2_client_secret='<<oauth2_client_secret>>'"
   - exec: rails r "SiteSetting.oauth2_authorize_url='<<oauth2_authorize_url>>'"
-  - exec: rails r "SiteSetting.oauth2_token_url='<<oauth2_token_url>>'"
+  - exec: rails r "SiteSetting.oauth2_token_url='http://titdev-nginx/oauth/token'"
   - exec: rails r "SiteSetting.oauth2_user_json_url='http://titdev-nginx/api/user/me'"
   - exec: rails r "SiteSetting.oauth2_json_user_id_path='user_id'"
   - exec: rails r "SiteSetting.oauth2_json_username_path='username'"
