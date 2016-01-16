@@ -5,7 +5,7 @@ ENV DASHBOARD_DOCKER_VERSION 1.0.0
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-RUN git clone https://github.com/macalik/TITDev.git .
+RUN git clone https://github.com/tritanium-industries/TITDev.git .
 COPY docker_req.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 # Monkey patch flask_pymongo forking (https://github.com/dcrosta/flask-pymongo/pull/67)
