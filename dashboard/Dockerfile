@@ -11,6 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Monkey patch flask_pymongo forking (https://github.com/dcrosta/flask-pymongo/pull/67)
 COPY __init__.py /usr/local/lib/python3.5/site-packages/flask_pymongo/__init__.py
 
+# Dev tools
+RUN apt-get update && apt-get install -y vim
+
 COPY base.json configs/base.json
 COPY uwsgi.ini uwsgi.ini
 
