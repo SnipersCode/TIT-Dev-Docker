@@ -36,6 +36,8 @@ def build():
     # Dynamic settings
     unified_config["mongo_uri"] = "mongodb://dashboard:{0}@titdev-database/dashboard".format(
             unified_config["random_password"])
+    unified_config["redis_url"] = "redis://:{0}@titdev-redis:6379/0".format(
+            unified_config["random_password"])
 
     unified_config["oauth2_authorize_url"] = "{0}/oauth/authorize".format(unified_config["dashboard_url"])
     unified_config["oauth2_client_id"] = "id_" + str(uuid.uuid1()).replace("-", "")

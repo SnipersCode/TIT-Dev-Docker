@@ -57,3 +57,9 @@ mumo:
   build: ./mumo
   container_name: titdev-mumo
   net: "titdev-network"
+
+redis:
+  restart: "always"
+  image: redis:latest
+  container_name: titdev-redis
+  net: "titdev-network"
