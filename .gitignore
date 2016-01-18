@@ -65,6 +65,7 @@ forum/
 unified_config.json
 dashboard/base.json
 database/users_add.txt
+database/admin_add.txt
 nginx/conf.d/default.conf
 murmur/murmur.ini
 mumo/mumo.ini

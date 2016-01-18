@@ -23,4 +23,4 @@ EXPOSE 3031
 VOLUME /usr/src/app/static
 
 ENTRYPOINT ["supervisord"]
-CMD ["-n -c /etc/supervisor/conf.d/supervisord.conf"]
+CMD ["-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
