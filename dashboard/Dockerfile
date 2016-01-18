@@ -10,8 +10,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Monkey patch flask_pymongo forking (https://github.com/dcrosta/flask-pymongo/pull/67)
 COPY __init__.py /usr/local/lib/python3.5/site-packages/flask_pymongo/__init__.py
 
-# Dev tools
-RUN apt-get update && apt-get install -y vim
+# OS tools
+RUN apt-get update && apt-get install -y vim supervisor
+RUN mkdir -p /var/log/supervisord /var/log/celery /var/run
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY base.json configs/base.json
 COPY uwsgi.ini uwsgi.ini
@@ -20,5 +22,5 @@ EXPOSE 3031
 
 VOLUME /usr/src/app/static
 
-ENTRYPOINT ["uwsgi"]
-CMD ["--ini", "uwsgi.ini"]
+ENTRYPOINT ["bash"]
+CMD ["supervisord"]
