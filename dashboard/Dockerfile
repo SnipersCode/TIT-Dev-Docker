@@ -12,7 +12,7 @@ COPY __init__.py /usr/local/lib/python3.5/site-packages/flask_pymongo/__init__.p
 
 # OS tools
 RUN apt-get update && apt-get install -y vim supervisor
-RUN mkdir -p /var/log/supervisord /var/log/celery /var/run
+RUN mkdir -p /var/log/supervisord /var/log/celery /var/run /var/log/uwsgi
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY base.json configs/base.json
@@ -22,5 +22,5 @@ EXPOSE 3031
 
 VOLUME /usr/src/app/static
 
-ENTRYPOINT ["bash"]
-CMD ["supervisord"]
+ENTRYPOINT ["supervisord"]
+CMD ["-n -c /etc/supervisor/conf.d/supervisord.conf"]
