@@ -13,5 +13,6 @@
   "marketeer_slack_url": "<<marketeer_slack_url>>",
   "market_service_slack_url": "<<market_service_slack_url>>",
   "slack_enable": <<slack_enable>>,
-  "forum_url": "<<forum_url>>"
+  "forum_url": "<<forum_url>>",
+  "dashboard_url": "<<dashboard_url>>"
 }
