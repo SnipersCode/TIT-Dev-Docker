@@ -37,11 +37,11 @@ case "$1" in
         ;;
       database )
         echo "Restoring $2 from file $3"
-        sudo docker run --volumes-from titdev-dbdata -v $(pwd)/backups/database:/backups ubuntu bash -c "rm -rf /data/db && cd / && tar xvf /backups/$3.tar"
+        docker run --volumes-from titdev-dbdata -v $(pwd)/backups/database:/backups ubuntu bash -c "rm -rf /data/db && cd / && tar xvf /backups/$3.tar"
         ;;
       murmur )
         echo "Restoring $2 from file $3"
-        sudo docker run --volumes-from titdev-dbdata -v $(pwd)/backups/murmur:/backups ubuntu bash -c "rm -rf /data/murmur && cd / && tar xvf /backups/$3.tar"
+        docker run --volumes-from titdev-dbdata -v $(pwd)/backups/murmur:/backups ubuntu bash -c "rm -rf /data/murmur && cd / && tar xvf /backups/$3.tar"
         ;;
       * )
         echo "Not a valid container for restore"
@@ -54,6 +54,14 @@ case "$1" in
       murmur )
         echo "Initializing $2 from file $3"
         docker run --volumes-from titdev-dbdata -v $(pwd)/backups:/backups ubuntu bash -c "cp /backups/$3 /data/murmur/murmur.sqlite"
+        ;;
+      nginx)
+        echo "Initializing static files"
+        docker-compose stop dashboard nginx
+        docker-compose rm dashboard nginx
+        docker-compose up -d dashboard
+        sleep 3
+        docker-compose up -d nginx
         ;;
       * )
         echo "Not a valid container for init"
