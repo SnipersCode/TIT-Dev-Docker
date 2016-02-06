@@ -10,9 +10,6 @@
   "market_hub_name": "<<market_hub_name>>",
   "default_ship_to": "<<default_ship_to>>",
   "home_station": <<home_station>>,
-  "marketeer_slack_url": "<<marketeer_slack_url>>",
-  "market_service_slack_url": "<<market_service_slack_url>>",
-  "slack_enable": <<slack_enable>>,
   "forum_url": "<<forum_url>>",
   "dashboard_url": "<<dashboard_url>>"
 }
