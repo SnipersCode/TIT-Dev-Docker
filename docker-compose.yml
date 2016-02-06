@@ -12,10 +12,9 @@ nginx:
   build: ./nginx
   ports:
     - "80:80"
-  volumes:
-    - /www/static
   volumes_from:
     - dashboard
+    - userdata
   container_name: titdev-nginx
   net: "titdev-network"
 
@@ -70,3 +69,12 @@ discord:
   container_name: titdev-discord
   env_file: settings/dashboard.env
   net: "titdev-network"
+
+userdata:
+  restart: "no"
+  build: ./userdata
+  volumes:
+    - /data/www
+  command: echo "Data Container for Primary and Murmur Database"
+  container_name: titdev-userdata
+  net: "none"

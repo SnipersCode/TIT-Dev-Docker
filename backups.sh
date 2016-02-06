@@ -56,10 +56,11 @@ case "$1" in
         docker run --volumes-from titdev-dbdata -v $(pwd)/backups:/backups ubuntu bash -c "cp /backups/$3 /data/murmur/murmur.sqlite"
         ;;
       nginx)
-        echo "Initializing static files"
-        docker-compose stop dashboard nginx
-        docker-compose rm dashboard nginx
-        docker-compose up -d dashboard
+        echo "Initializing custom static files"
+        docker-compose stop nginx
+        docker-compose rm userdata nginx
+        docker-compose build userdata
+        docker-compose up -d userdata
         sleep 3
         docker-compose up -d nginx
         ;;
