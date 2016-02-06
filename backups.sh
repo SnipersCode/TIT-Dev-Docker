@@ -59,7 +59,7 @@ case "$1" in
         echo "Initializing custom static files"
         docker-compose stop nginx
         docker-compose rm userdata nginx
-        docker-compose build userdata
+        docker-compose build --no-cache userdata
         docker-compose up -d userdata
         sleep 3
         docker-compose up -d nginx
