@@ -63,3 +63,10 @@ redis:
   image: redis:latest
   container_name: titdev-redis
   net: "titdev-network"
+
+discord:
+  restart: "always"
+  build: ./discord
+  container_name: titdev-discord
+  env_file: settings/dashboard.env
+  net: "titdev-network"

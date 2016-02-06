@@ -30,27 +30,27 @@ docker-compose build --no-cache
 if [ "$FIRST" -eq 1 ]; then
     docker network create titdev-network
     docker network connect titdev-network discourse
-    docker-compose up -d dbdata database murmur
+    docker-compose up -d dbdata database murmur redis
     until docker exec titdev-database sh -c 'mongo < /scripts/admin_add.txt'
     do
         sleep 5
         echo "Could not connect to database. Retrying... (Use Ctrl-C to stop trying)."
     done
     sleep 5
-    docker-compose up -d dashboard mumo
+    docker-compose up -d dashboard mumo discord
     docker exec titdev-database sh -c 'mongo < /scripts/users_add.txt'
     sleep 5
     docker-compose up -d nginx
 else
     docker network connect titdev-network discourse
-    docker-compose up -d dbdata database murmur
+    docker-compose up -d dbdata database murmur redis
     until docker exec titdev-database sh -c 'mongo < /scripts/users_add.txt'
     do
         sleep 5
         echo "Could not connect to database. Retrying... (Use Ctrl-C to stop trying)."
     done
     sleep 5
-    docker-compose up -d dashboard mumo
+    docker-compose up -d dashboard mumo discord
     sleep 5
     docker-compose up -d nginx
 fi
