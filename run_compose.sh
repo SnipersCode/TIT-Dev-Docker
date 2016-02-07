@@ -22,28 +22,28 @@ else
     ./launcher rebuild discourse
 fi
 
-# build and start docker image
-docker-compose stop
+# build and stop docker image
 docker-compose build --no-cache
+docker-compose stop
 
 # wait for database, then execute init changes to database
 if [ "$FIRST" -eq 1 ]; then
     docker network create titdev-network
     docker network connect titdev-network discourse
-    docker-compose up -d dbdata database murmur redis
+    docker-compose up -d dbdata database joomladb redis
     until docker exec titdev-database sh -c 'mongo < /scripts/admin_add.txt'
     do
         sleep 5
         echo "Could not connect to database. Retrying... (Use Ctrl-C to stop trying)."
     done
     sleep 5
-    docker-compose up -d dashboard mumo discord
+    docker-compose up -d dashboard joomla discord
     docker exec titdev-database sh -c 'mongo < /scripts/users_add.txt'
     sleep 5
     docker-compose up -d nginx
 else
     docker network connect titdev-network discourse
-    docker-compose up -d dbdata database murmur redis
+    docker-compose up -d dbdata database joomladb redis
     until docker exec titdev-database sh -c 'mongo < /scripts/users_add.txt'
     do
         sleep 5

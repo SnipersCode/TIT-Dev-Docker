@@ -10,7 +10,8 @@ import uuid
 def init():
     dynamics = ["mongo_uri", "redirect_uri", "redis_url", "redis_host",
                 "oauth2_authorize_url", "oauth2_client_id", "oauth2_client_secret", "oauth2_logout_redirect",
-                "oauth2_token_url", "oauth2_user_json_url", "oauth2_redirect_uri"]
+                "oauth2_token_url", "oauth2_user_json_url", "oauth2_redirect_uri",
+                "forum_url", "dashboard_url"]
     config_dict = {
         "dashboard_url": ""
     }
@@ -38,6 +39,9 @@ def build():
             unified_config["random_password"])
     unified_config["redis_url"] = "redis://titdev-redis:6379/0"
     unified_config["redis_host"] = "titdev-redis"
+
+    unified_config["dashboard_url"] = "http://{0}".format(unified_config["dashboard_hostname"])
+    unified_config["forum_url"] = "http://{0}".format(unified_config["forum_hostname"])
 
     unified_config["oauth2_authorize_url"] = "{0}/oauth/authorize".format(unified_config["dashboard_url"])
     unified_config["oauth2_client_id"] = "id_" + str(uuid.uuid1()).replace("-", "")

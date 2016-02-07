@@ -15,6 +15,7 @@ nginx:
   volumes_from:
     - dashboard
     - userdata
+    - joomla
   container_name: titdev-nginx
   net: "titdev-network"
 
@@ -78,3 +79,23 @@ userdata:
   command: echo "Data Container for Primary and Murmur Database"
   container_name: titdev-userdata
   net: "none"
+
+joomla:
+  image: joomla:fpm
+  net: "titdev-network"
+  container_name: "titdev-joomla"
+  environment:
+    JOOMLA_DB_HOST: titdev-joomladb:3306
+    JOOMLA_DB_USER: root
+    JOOMLA_DB_PASSWORD: internalDev
+    JOOMLA_DB_NAME: joomla
+  volumes:
+    - /usr/src/joomla
+
+joomladb:
+  image: mysql:5.6
+  environment:
+    MYSQL_ROOT_PASSWORD: internalDev
+  net: "titdev-network"
+  container_name: "titdev-joomladb"
+
