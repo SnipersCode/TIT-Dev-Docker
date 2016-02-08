@@ -91,6 +91,7 @@ joomla:
     JOOMLA_DB_NAME: joomla
   volumes:
     - /usr/src/joomla
+    - ./joomla_tmp:/usr/src/joomla/tmp
 
 joomladb:
   image: mysql:5.6
