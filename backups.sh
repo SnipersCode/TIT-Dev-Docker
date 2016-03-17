@@ -76,7 +76,7 @@ case "$1" in
         echo "Updating dashboard, discord, nginx, userdata"
         docker-compose build --no-cache dashboard discord nginx userdata
         docker-compose stop dashboard discord nginx
-        docker-compose rm dashboard discord nginx userdata
+        docker-compose rm -v dashboard discord nginx userdata
         docker-compose up -d dashboard discord userdata
         sleep 3
         docker-compose up -d nginx
