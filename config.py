@@ -8,13 +8,11 @@ import uuid
 
 
 def init():
-    dynamics = ["mongo_uri", "redirect_uri", "redis_url", "redis_host",
+    dynamics = ["mongo_uri", "redirect_uri",
                 "oauth2_authorize_url", "oauth2_client_id", "oauth2_client_secret", "oauth2_logout_redirect",
                 "oauth2_token_url", "oauth2_user_json_url", "oauth2_redirect_uri",
-                "forum_url", "dashboard_url"]
-    config_dict = {
-        "dashboard_url": ""
-    }
+                "forum_url", "dashboard_url", "discord_redirect_uri"]
+    config_dict = {}
     # Start replacing
     replace_pattern = re.compile("(<<(.*)>>)")
     file_list = next(os.walk("templates"))[2]
@@ -37,8 +35,6 @@ def build():
     # Dynamic settings
     unified_config["mongo_uri"] = "mongodb://dashboard:{0}@titdev-database/dashboard".format(
             unified_config["random_password"])
-    unified_config["redis_url"] = "redis://titdev-redis:6379/0"
-    unified_config["redis_host"] = "titdev-redis"
 
     unified_config["dashboard_url"] = "http://{0}".format(unified_config["dashboard_hostname"])
     unified_config["forum_url"] = "http://{0}".format(unified_config["forum_hostname"])
@@ -51,6 +47,7 @@ def build():
     unified_config["oauth2_redirect_uri"] = "{0}/auth/oauth2_basic/callback".format(unified_config["forum_url"])
 
     unified_config["redirect_uri"] = "{0}/auth/sso_endpoint".format(unified_config["dashboard_url"])
+    unified_config["discord_redirect_uri"] = "{0}/auth/discord_endpoint".format(unified_config["dashboard_url"])
 
     # Check for output folders
     if not os.path.exists("settings"):
