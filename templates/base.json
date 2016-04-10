@@ -11,5 +11,6 @@
   "default_ship_to": "<<default_ship_to>>",
   "home_station": <<home_station>>,
   "forum_url": "<<forum_url>>",
-  "dashboard_url": "<<dashboard_url>>"
+  "dashboard_url": "<<dashboard_url>>",
+  "discord_server_id": <<discord_server_id>>
 }
