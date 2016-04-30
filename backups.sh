@@ -73,6 +73,8 @@ case "$1" in
   update )
     case "$2" in
       dev )
+        echo "Waiting $3 seconds"
+        sleep $3
         echo "Updating dashboard, discord, nginx, userdata"
         docker-compose build --no-cache dashboard discord nginx userdata
         docker-compose stop dashboard discord nginx
@@ -80,6 +82,8 @@ case "$1" in
         docker-compose up -d dashboard discord userdata
         sleep 3
         docker-compose up -d nginx
+        # Bring up joomladb in case it went down.
+        docker-compose up -d joomladb
         ;;
       * )
         echo "Not a valid option for updating"
